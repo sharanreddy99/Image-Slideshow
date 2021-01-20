@@ -46,11 +46,33 @@ const Signin = () => {
     });
 
     if (response.data.status === "success") {
+      formData = new FormData();
+      formData.append("email", user.email);
+
+      const allImages = await axios({
+        url:
+          "http://localhost/dynamicimageslideshow/backend_php/getallimages.php",
+        method: "post",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        data: formData,
+      });
+
+      var newArray = [];
+      var imgarr = JSON.parse(allImages.data.imagesarray);
+      var extarr = JSON.parse(allImages.data.extensionsarray);
+
+      for (var i = 0; i < extarr.length; i++) {
+        newArray.push("data:image/" + extarr[i] + ";base64," + imgarr[i]);
+      }
+
       history.push({
         pathname: "/dashboard",
         state: {
           email: response.data.email,
           password: response.data.password,
+          allImages: newArray,
         },
       });
     } else {
