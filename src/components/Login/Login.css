@@ -1,0 +1,30 @@
+.Login {
+  display: flex;
+  min-width: 100vw;
+  min-height: 100vh;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #e3e2df;
+}
+
+.Login__subcontainer {
+  width: 40vw;
+  min-height: 90vh;
+  border-radius: 20px;
+  box-shadow: 5px 5px 20px black;
+}
+
+@media (max-width: 768px) {
+  .Login {
+    flex-direction: column;
+  }
+
+  .Login__subcontainer {
+    background-color: white;
+    width: 90vw;
+    height: 90vh;
+    border-radius: 20px;
+    box-shadow: 5px 5px 20px black;
+    margin: 5% 0%;
+  }
+}
