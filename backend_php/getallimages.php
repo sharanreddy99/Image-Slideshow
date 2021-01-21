@@ -8,12 +8,12 @@
   if ($_SERVER["REQUEST_METHOD"]=="POST") { 
       $email = $_POST["email"];
 
-      $sql = "select * from imagepaths";
+      $sql = "select * from imagepaths where email = '$email';";
       $res = $conn->query($sql);
       $imagesarray = array();
       $extensionsarray = array();
         while($row = $res->fetch_assoc()){
-          $filename = "./gallery/".$row["filename"];
+          $filename = "../backend_golang/gallery/".$row["filename"];
           $imageFileType = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
           $imageData = base64_encode(file_get_contents($filename));
 

@@ -94,7 +94,7 @@ const Signup = () => {
       formData.append("password", user.password);
 
       const response = await axios({
-        url: "http://localhost/dynamicimageslideshow/backend_php/signup.php",
+        url: "/signup",
         method: "post",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",

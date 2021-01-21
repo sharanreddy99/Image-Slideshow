@@ -37,7 +37,7 @@ const Signin = () => {
     formData.append("password", user.password);
 
     const response = await axios({
-      url: "http://localhost/dynamicimageslideshow/backend_php/signin.php",
+      url: "/signin",
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -50,8 +50,7 @@ const Signin = () => {
       formData.append("email", user.email);
 
       const allImages = await axios({
-        url:
-          "http://localhost/dynamicimageslideshow/backend_php/getallimages.php",
+        url: "/getallimages",
         method: "post",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",

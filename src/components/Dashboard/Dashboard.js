@@ -11,6 +11,7 @@ const Dashboard = () => {
 
   //States
   const [image, setImage] = useState(null);
+  const [sepImage, setSepImage] = useState("");
   const [allImages, setAllImages] = useState(location.state.allImages);
   const [modal, setModal] = useState({
     isShown: false,
@@ -36,7 +37,7 @@ const Dashboard = () => {
     formData.append("email", location.state.email);
 
     const response = await axios({
-      url: "http://localhost/dynamicimageslideshow/backend_php/imageupload.php",
+      url: "/imageupload",
       method: "post",
       headers: {
         "Content-Type": "multipart/form-data",
@@ -62,6 +63,8 @@ const Dashboard = () => {
       ]);
       setCounter(arraylength);
     }
+
+    setSepImage("");
   };
 
   const fetchImage = async (filename) => {
@@ -69,8 +72,7 @@ const Dashboard = () => {
     formData.append("filename", filename);
 
     const response = await axios({
-      url:
-        "http://localhost/dynamicimageslideshow/backend_php/getsingleimage.php",
+      url: "/getsingleimage",
       method: "post",
       headers: {
         "Content-Type": "multipart/form-data",
@@ -135,7 +137,9 @@ const Dashboard = () => {
               type="file"
               className="form-control customform"
               name="image"
+              value={sepImage}
               onChange={(e) => {
+                setSepImage(e.target.value);
                 setImage(e.target.files[0]);
               }}
             />

@@ -11,8 +11,6 @@
         $mobile = $_POST['mobile'];
         $password = $_POST['password'];
 
-        $sql = "create table if not exists user(id int(10) auto_increment primary key,firstname varchar(50),lastname varchar(50),email varchar(50),mobile varchar(10),password varchar(50));";
-        $conn->query($sql);
 
         $sql = "select * from user where email='$email';";
         $res = $conn->query($sql);

@@ -9,11 +9,6 @@
   // If upload button is clicked ... 
   if ($_SERVER["REQUEST_METHOD"]=="POST") { 
 
-    
-    $sql = "create table if not exists imagepaths(fileno int(10) auto_increment primary key,filename varchar(50),email varchar(50));";
-    $conn->query($sql);
-
-
     $sql = "select max(fileno) fileno from imagepaths";
     $maxfileno = ($conn->query($sql)->fetch_assoc())["fileno"];
 
@@ -26,7 +21,7 @@
     $email = $_POST["email"];
     $filename = $_FILES["imagefile"]["name"]; 
     $tempname = $_FILES["imagefile"]["tmp_name"]; 
-    $targetdir = "./gallery/";
+    $targetdir = "../backend_golang/gallery/";
     $imageFileType = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
     $targetpath = $targetdir."image".$maxfileno.".".$imageFileType;
     $filename="image".$maxfileno.".".$imageFileType;
