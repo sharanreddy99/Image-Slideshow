@@ -65,6 +65,7 @@ const Dashboard = () => {
     }
 
     setSepImage("");
+    setImage(null);
   };
 
   const fetchImage = async (filename) => {
@@ -94,7 +95,13 @@ const Dashboard = () => {
   return (
     <div className="Dashboard">
       <div className="Dashboard__Gallery Dashboard__container">
-        <img src={allImages[counter]} alt="" />
+        {allImages.length > 0 ? (
+          <img src={allImages[counter]} alt="" />
+        ) : (
+          <div className="emptyimage">
+            <h4>No Image to Display</h4>
+          </div>
+        )}
         <div className="row mt-3 p-5">
           <div className="col">
             <button

@@ -41,6 +41,20 @@
   margin-top: 5%;
 }
 
+.Dashboard__Gallery .emptyimage {
+  width: 50%;
+  height: 40vh;
+  border-radius: 20px;
+  margin-left: 20%;
+  margin-top: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #5d001e;
+  color: white;
+  font-weight: bold;
+}
+
 .Dashboard__buttons_container .customform {
   background-color: #5d001e;
   color: white;
@@ -106,5 +120,19 @@
     width: 90%;
     margin-left: 4%;
     margin-top: 10%;
+  }
+
+  .Dashboard__Gallery .emptyimage {
+    width: 90%;
+    height: 40vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 4%;
+    margin-top: 10%;
+    background-color: #5d001e;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
   }
 }
