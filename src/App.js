@@ -20,16 +20,6 @@ axios.interceptors.request.use(
   }
 );
 
-axios.interceptors.response.use(
-  function (config) {
-    console.log(config);
-    return config;
-  },
-  function (error) {
-    return Promise.reject(error);
-  }
-);
-
 const App = () => {
   return (
     <div className="App">
