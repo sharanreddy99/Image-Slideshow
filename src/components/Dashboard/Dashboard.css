@@ -9,7 +9,7 @@
 
 .Dashboard__Gallery {
   width: 60%;
-  min-height: 80vh;
+  height: 80vh;
 }
 
 .Dashboard__buttonsdiv {
@@ -36,7 +36,8 @@
 }
 
 .Dashboard__Gallery img {
-  width: 50%;
+  width: 40%;
+  height: 50vh;
   margin-left: 20%;
   margin-top: 5%;
 }

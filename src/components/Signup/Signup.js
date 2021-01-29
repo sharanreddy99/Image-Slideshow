@@ -93,24 +93,32 @@ const Signup = () => {
       formData.append("mobile", user.mobile);
       formData.append("password", user.password);
 
-      const response = await axios({
-        url: "/signup",
-        method: "post",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        data: formData,
-      });
+      try {
+        const response = await axios({
+          url: "/signup",
+          method: "post",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          data: formData,
+        });
 
-      setModal({
-        isShown: true,
-        ModalTitle: response.data.ModalTitle,
-        ModalBody: response.data.ModalBody,
-      });
+        setModal({
+          isShown: true,
+          ModalTitle: response.data.ModalTitle,
+          ModalBody: response.data.ModalBody,
+        });
 
-      if (response.status === 201) {
-        setUser(initialState);
-        setValidUser(initialState2);
+        if (response.status === 201) {
+          setUser(initialState);
+          setValidUser(initialState2);
+        }
+      } catch (error) {
+        setModal({
+          isShown: true,
+          ModalTitle: error.response.data.ModalTitle,
+          ModalBody: error.response.data.ModalBody,
+        });
       }
     }
   };

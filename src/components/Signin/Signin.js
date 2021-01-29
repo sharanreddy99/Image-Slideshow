@@ -36,21 +36,9 @@ const Signin = () => {
     formData.append("email", user.email);
     formData.append("password", user.password);
 
-    const response = await axios({
-      url: "/signin",
-      method: "post",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      data: formData,
-    });
-
-    if (response.data.status === "success") {
-      formData = new FormData();
-      formData.append("email", user.email);
-
-      const allImages = await axios({
-        url: "/getallimages",
+    try {
+      const response = await axios({
+        url: "/signin",
         method: "post",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -58,28 +46,48 @@ const Signin = () => {
         data: formData,
       });
 
-      var newArray = [];
-      var imgarr = JSON.parse(allImages.data.imagesarray);
-      var extarr = JSON.parse(allImages.data.extensionsarray);
+      if (response.status === 200) {
+        formData = new FormData();
+        formData.append("email", user.email);
+        formData.append("token", response.data.token);
+        const allImages = await axios({
+          url: "/getallimages",
+          method: "post",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          data: formData,
+        });
+        var newArray = [];
+        var imgarr = JSON.parse(allImages.data.imagesarray);
+        var extarr = JSON.parse(allImages.data.extensionsarray);
+        var filenamesarray = JSON.parse(allImages.data.filenamesarray);
 
-      for (var i = 0; i < extarr.length; i++) {
-        newArray.push("data:image/" + extarr[i] + ";base64," + imgarr[i]);
+        for (var i = 0; i < extarr.length; i++) {
+          newArray.push("data:image/" + extarr[i] + ";base64," + imgarr[i]);
+        }
+        history.push({
+          pathname: "/dashboard",
+          state: {
+            email: response.data.email,
+            token: response.data.token,
+            allImages: newArray,
+            filenames: filenamesarray,
+          },
+        });
+      } else {
+        setUser(initialState);
+        setModal({
+          isShown: true,
+          ModalTitle: response.data.ModalTitle,
+          ModalBody: response.data.ModalBody,
+        });
       }
-
-      history.push({
-        pathname: "/dashboard",
-        state: {
-          email: response.data.email,
-          password: response.data.password,
-          allImages: newArray,
-        },
-      });
-    } else {
-      setUser(initialState);
+    } catch (error) {
       setModal({
         isShown: true,
-        ModalTitle: response.data.ModalTitle,
-        ModalBody: response.data.ModalBody,
+        ModalTitle: error.response.data.ModalTitle,
+        ModalBody: error.response.data.ModalBody,
       });
     }
   };

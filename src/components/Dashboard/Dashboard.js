@@ -12,7 +12,12 @@ const Dashboard = () => {
   //States
   const [image, setImage] = useState(null);
   const [sepImage, setSepImage] = useState("");
-  const [allImages, setAllImages] = useState(location.state.allImages);
+  const [allImages, setAllImages] = useState(
+    (location.state && location.state.allImages) || []
+  );
+  const [filenames, setFilenames] = useState(
+    (location.state && location.state.filenames) || []
+  );
   const [modal, setModal] = useState({
     isShown: false,
     ModalTitle: "",
@@ -35,33 +40,46 @@ const Dashboard = () => {
     var formData = new FormData();
     formData.append("imagefile", image);
     formData.append("email", location.state.email);
+    formData.append("token", location.state.token);
 
-    const response = await axios({
-      url: "/imageupload",
-      method: "post",
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      data: formData,
-    });
+    try {
+      const response = await axios({
+        url: "/imageupload",
+        method: "post",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        data: formData,
+      });
 
-    if (response.data.status === "failure") {
+      if (response.data.status === "failure") {
+        setModal({
+          isShown: true,
+          ModalTitle: response.data.ModalTitle,
+          ModalBody: response.data.ModalBody,
+        });
+      } else {
+        const arraylength = allImages.length;
+        const imagefile = await fetchImage(response.data.filename);
+
+        var extension = response.data.filename.split(".")[1];
+        setAllImages([
+          ...allImages,
+          "data:image/" + extension + ";base64," + imagefile.imagedata,
+        ]);
+        setFilenames([...filenames, response.data.filename]);
+        setCounter(arraylength);
+      }
+    } catch (error) {
       setModal({
         isShown: true,
-        ModalTitle: response.data.ModalTitle,
-        ModalBody: response.data.ModalBody,
+        ModalTitle: error.response.data.ModalTitle,
+        ModalBody: error.response.data.ModalBody,
       });
-    } else {
-      const arraylength = allImages.length;
 
-      const imagefile = await fetchImage(response.data.filename);
-      var extension = response.data.filename.split(".")[1];
-
-      setAllImages([
-        ...allImages,
-        "data:image/" + extension + ";base64," + imagefile.imagedata,
-      ]);
-      setCounter(arraylength);
+      if (error.response && error.response.status === 401) {
+        logoutHandler();
+      }
     }
 
     setSepImage("");
@@ -71,6 +89,8 @@ const Dashboard = () => {
   const fetchImage = async (filename) => {
     var formData = new FormData();
     formData.append("filename", filename);
+    formData.append("email", location.state.email);
+    formData.append("token", location.state.token);
 
     const response = await axios({
       url: "/getsingleimage",
@@ -84,8 +104,22 @@ const Dashboard = () => {
     return response.data;
   };
 
-  const logoutHandler = () => {
-    history.push("/login");
+  const logoutHandler = async () => {
+    var formData = new FormData();
+    formData.append("email", location.state.email);
+
+    await axios({
+      url: "/logout",
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      data: formData,
+    });
+
+    setTimeout(() => {
+      history.push("/login");
+    }, 2000);
   };
 
   if (!(location.state && location.state.email)) {
@@ -96,7 +130,10 @@ const Dashboard = () => {
     <div className="Dashboard">
       <div className="Dashboard__Gallery Dashboard__container">
         {allImages.length > 0 ? (
-          <img src={allImages[counter]} alt="" />
+          <div>
+            <img src={allImages[counter]} alt="" />
+            <h3>{filenames[counter]}</h3>
+          </div>
         ) : (
           <div className="emptyimage">
             <h4>No Image to Display</h4>

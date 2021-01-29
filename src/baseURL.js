@@ -1,5 +1,5 @@
 export const startingPartPHP =
-  "http://localhost/dynamicimageslideshow/backend_php";
+  "http://localhost:80/api";
 export const endingPartPHP = ".php";
 
 export const startingPartGO = "http://localhost:4201";
