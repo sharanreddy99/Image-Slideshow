@@ -8,6 +8,8 @@ import {
 import Login from "./components/Login/Login";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Error from "./components/Error/Error";
+import PageTemplate from "./components/PageTemplate/PageTemplate";
+import EditUser from "./components/EditUser/EditUser";
 
 const RouterSetup = () => {
   return (
@@ -20,7 +22,14 @@ const RouterSetup = () => {
           <Login />
         </Route>
         <Route exact path="/dashboard">
-          <Dashboard />
+          <PageTemplate>
+            <Dashboard />
+          </PageTemplate>
+        </Route>
+        <Route exact path="/edituser">
+          <PageTemplate>
+            <EditUser />
+          </PageTemplate>
         </Route>
         <Route path="*">
           <Error />

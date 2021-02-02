@@ -4,16 +4,17 @@ import axios from "axios";
 import "./Signin.css";
 import ProfileImage from "../../assets/images/profile.png";
 import TemplateModal from "../Modals/TemplateModal";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 const Signin = () => {
   //Variables and Constants
   const initialState = {
-    email: "",
-    password: "",
+    email: "sharanreddy@gmail.com",
+    password: "Sharan@99",
   };
 
   const history = useHistory();
+  const location = useLocation();
 
   //States
   const [user, setUser] = useState(initialState);
@@ -69,6 +70,7 @@ const Signin = () => {
         history.push({
           pathname: "/dashboard",
           state: {
+            ...location.state,
             email: response.data.email,
             token: response.data.token,
             allImages: newArray,

@@ -1,0 +1,63 @@
+.EditUser {
+  padding: 2%;
+  background-color: white;
+  border-radius: 20px;
+  width: 90%;
+  height: 90%;
+}
+
+.EditUser .customform {
+  background-color: #e3e2df;
+  color: black;
+  font-weight: bold;
+  border: 1px solid black;
+}
+
+.EditUser .invalidform {
+  background-color: rgb(224, 37, 37);
+  color: black;
+  font-weight: bold;
+  border: 1px solid black;
+}
+
+.EditUser .invalidform:focus {
+  background-color: rgb(224, 37, 37);
+  outline: none;
+  box-shadow: 0px 0px 10px black, 0px 0px 20px black, 0px 0px 40px black;
+}
+
+.EditUser .invalidform::placeholder {
+  color: black;
+}
+
+.EditUser .customform:focus {
+  outline: none;
+  box-shadow: 0px 0px 10px black, 0px 0px 20px black, 0px 0px 40px black;
+}
+
+.EditUser .customform::placeholder {
+  color: black;
+}
+
+.EditUser .customtext {
+  background-color: black;
+  color: white;
+  width: 12vw;
+}
+
+.EditUser .custombutton {
+  background-color: #5d001e;
+  color: white;
+  font-weight: bold;
+}
+
+.EditUser .custombutton:disabled {
+  cursor: not-allowed;
+}
+
+.EditUser .custombutton:hover {
+  background-color: black;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0px 0px 10px #5d001e, 0px 0px 20px #5d001e, 0px 0px 40px #5d0013;
+}

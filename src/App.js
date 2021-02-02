@@ -11,8 +11,8 @@ import {
 
 axios.interceptors.request.use(
   function (config) {
-    config.url = startingPartPHP + config.url + endingPartPHP;
-    // config.url = startingPartGO + config.url + endingPartGO;
+    // config.url = startingPartPHP + config.url + endingPartPHP;
+    config.url = startingPartGO + config.url + endingPartGO;
     return config;
   },
   function (error) {
