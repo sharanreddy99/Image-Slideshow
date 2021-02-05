@@ -10,7 +10,6 @@ const PageTemplate = (props) => {
   const location = useLocation();
   const history = useHistory();
 
-  const email = location.state && location.state.email;
   const token = location.state && location.state.token;
   const [modal, setModal] = useState({
     isShown: false,
@@ -26,7 +25,6 @@ const PageTemplate = (props) => {
   const isAuthorized = async () => {
     try {
       var formData = new FormData();
-      formData.append("email", email);
       formData.append("token", token);
 
       const response = await axios({
@@ -57,7 +55,6 @@ const PageTemplate = (props) => {
   const editUserHandler = async () => {
     try {
       var formData = new FormData();
-      formData.append("email", email);
       formData.append("token", token);
 
       const response = await axios({
@@ -77,6 +74,7 @@ const PageTemplate = (props) => {
           lastname: response.data.lastname,
           mobile: response.data.mobile,
           password: response.data.password,
+          email: response.data.email,
         },
       });
     } catch (error) {
@@ -98,8 +96,7 @@ const PageTemplate = (props) => {
 
   const logoutHandler = async () => {
     var formData = new FormData();
-    formData.append("email", email);
-
+    formData.append("token", token);
     await axios({
       url: "/logout",
       method: "post",

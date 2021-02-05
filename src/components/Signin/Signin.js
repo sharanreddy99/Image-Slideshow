@@ -9,7 +9,7 @@ import { useHistory, useLocation } from "react-router-dom";
 const Signin = () => {
   //Variables and Constants
   const initialState = {
-    email: "sharanreddy@gmail.com",
+    email: "sharan@gmail.com",
     password: "Sharan@99",
   };
 
@@ -49,7 +49,6 @@ const Signin = () => {
 
       if (response.status === 200) {
         formData = new FormData();
-        formData.append("email", user.email);
         formData.append("token", response.data.token);
         const allImages = await axios({
           url: "/getallimages",
@@ -59,6 +58,7 @@ const Signin = () => {
           },
           data: formData,
         });
+
         var newArray = [];
         var imgarr = JSON.parse(allImages.data.imagesarray);
         var extarr = JSON.parse(allImages.data.extensionsarray);
@@ -71,7 +71,6 @@ const Signin = () => {
           pathname: "/dashboard",
           state: {
             ...location.state,
-            email: response.data.email,
             token: response.data.token,
             allImages: newArray,
             filenames: filenamesarray,

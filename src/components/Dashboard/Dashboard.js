@@ -9,7 +9,6 @@ const Dashboard = () => {
   //Constants and Variables
   const history = useHistory();
   const location = useLocation();
-  const email = location.state && location.state.email;
   const token = location.state && location.state.token;
 
   //States
@@ -47,7 +46,6 @@ const Dashboard = () => {
 
     var formData = new FormData();
     formData.append("imagefile", image);
-    formData.append("email", email);
     formData.append("token", token);
 
     try {
@@ -101,7 +99,6 @@ const Dashboard = () => {
   const fetchImage = async (filename) => {
     var formData = new FormData();
     formData.append("filename", filename);
-    formData.append("email", email);
     formData.append("token", token);
 
     const response = await axios({
@@ -122,7 +119,6 @@ const Dashboard = () => {
 
       var formData = new FormData();
       formData.append("filename", filenames[counter]);
-      formData.append("email", email);
       formData.append("token", token);
 
       const response = await axios({
@@ -177,7 +173,7 @@ const Dashboard = () => {
 
   const logoutHandler = async () => {
     var formData = new FormData();
-    formData.append("email", location.state.email);
+    formData.append("token", token);
 
     await axios({
       url: "/logout",
