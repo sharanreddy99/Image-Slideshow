@@ -1,6 +1,6 @@
 package main
 
-import "router"
+import "backendgo/router"
 
 func main() {
 	router.HandleRequests()
