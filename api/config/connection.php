@@ -1,5 +1,9 @@
 <?php
 
+require realpath(__DIR__.'/../../vendor/autoload.php');
+
+$dotenv = Dotenv\Dotenv::createImmutable(realpath(__DIR__."/../../"));
+$dotenv->load();
 
 class DatabaseConnection {
 
@@ -9,21 +13,22 @@ class DatabaseConnection {
     private $db_pass;
     
     public function __construct(){
-        // $this->db_host = $_ENV["DB_HOST_LOCAL"];
-        // $this->db_user = $_ENV["DB_USERNAME_LOCAL"];
-        // $this->db_pass = $_ENV["DB_PASSWORD_LOCAL"];
+
+        $this->db_host = $_ENV["DB_HOST_LOCAL"];
+        $this->db_user = $_ENV["DB_USERNAME_LOCAL"];
+        $this->db_pass = $_ENV["DB_PASSWORD_LOCAL"];
     
-        $this->db_host = $_ENV["DB_HOST"];
-        $this->db_user = $_ENV["DB_USERNAME"];
-        $this->db_pass = $_ENV["DB_PASSWORD"];
+        // $this->db_host = $_ENV["DB_HOST"];
+        // $this->db_user = $_ENV["DB_USERNAME"];
+        // $this->db_pass = $_ENV["DB_PASSWORD"];
     }
 
     public function getConnection(){
     
         $this->connection = null;
         try {
-            $this->connection = new mysqli($this->db_host,$this->db_user,$this->db_pass);
             
+            $this->connection = new mysqli($this->db_host,$this->db_user,$this->db_pass);
             $sql = "create database if not exists sureify";
             $this->connection->query($sql);
 
