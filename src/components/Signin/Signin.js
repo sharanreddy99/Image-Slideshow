@@ -9,8 +9,8 @@ import { useHistory, useLocation } from "react-router-dom";
 const Signin = () => {
   //Variables and Constants
   const initialState = {
-    email: "sharan@gmail.com",
-    password: "Sharan@99",
+    email: "",
+    password: "",
   };
 
   const history = useHistory();
