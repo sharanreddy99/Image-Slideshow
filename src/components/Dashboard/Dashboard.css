@@ -1,0 +1,125 @@
+.Dashboard {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.Dashboard__container {
+  border-radius: 20px;
+  box-shadow: 0px 0px 10px black, 0px 0px 20px black;
+}
+
+.Dashboard__left {
+  width: 60%;
+  height: 80vh;
+}
+
+.Dashboard__right {
+  width: 30%;
+  height: 40vh;
+}
+
+.Dashboard__left img {
+  width: 100%;
+  height: 80vh;
+  border-radius: 20px;
+}
+
+.Dashboard .emptyimage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 80vh;
+  border-radius: 20px;
+  background-color: #5d001e;
+}
+
+.emptyimage h2 {
+  color: white;
+  text-shadow: 1px 1px black;
+  font-weight: bold;
+}
+
+.Dashboard__left i {
+  transform: scale(1.5, 1.5);
+  color: white;
+  margin-left: 24%;
+}
+
+.Dashboard__left i:hover {
+  cursor: pointer;
+  transform: scale(2, 2);
+}
+
+.Dashboard .fa-trash {
+  position: relative;
+  top: -6%;
+  left: 25%;
+}
+
+.Dashboard .fa-arrow-left {
+  position: relative;
+  top: -55%;
+  left: -48%;
+}
+
+.Dashboard .fa-arrow-right {
+  position: relative;
+  top: -55%;
+  left: 20%;
+}
+
+.Dashboard__right {
+  padding: 1%;
+}
+
+.Dashboard__right .custombutton,
+.Dashboard__right .customform {
+  background-color: #5d001e;
+  color: white;
+  font-weight: bold;
+}
+
+.Dashboard__right .custombutton:hover,
+.Dashboard__right .customform:hover {
+  box-shadow: 0px 0px 10px black, 0px 0px 20px black;
+}
+
+@media (max-width: 768px) {
+  .Dashboard {
+    flex-direction: column;
+  }
+
+  .Dashboard__left {
+    margin: 10% 0%;
+    width: 90%;
+    height: 80vh;
+  }
+
+  .Dashboard__right {
+    margin: 10% 0%;
+    width: 90%;
+    height: 40vh;
+  }
+
+  .Dashboard img {
+    height: 80vh;
+  }
+
+  .Dashboard .emptyimage {
+    height: 80vh;
+  }
+
+  .Dashboard .fa-arrow-left {
+    position: relative;
+    top: -6%;
+  }
+
+  .Dashboard .fa-arrow-right {
+    top: -6%;
+    left: 14%;
+  }
+}

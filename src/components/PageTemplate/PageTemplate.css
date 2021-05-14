@@ -1,0 +1,62 @@
+.PageTemplate {
+  width: 100vw;
+  min-height: 100vh;
+  background-color: #e3e2df;
+}
+
+.PageTemplate__navbar {
+  padding: 10px;
+  background-color: #5d001e;
+  color: white;
+}
+
+.PageTemplate__navbar h5 {
+  display: inline;
+  background-color: black;
+  color: white;
+  padding: 5px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+.PageTemplate__navbar h5:hover {
+  box-shadow: 0px 0px 10px white;
+}
+
+.PageTemplate__body {
+  width: 100vw;
+  min-height: 93vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.PageTemplate__navbar_icons {
+  float: right;
+  background-color: black;
+  width: 8%;
+  height: 30px;
+  border-radius: 10px;
+}
+
+.PageTemplate__navbar i {
+  background-color: black;
+  transform: scale(1.5, 1.5);
+  color: white;
+  margin-left: 24%;
+  position: relative;
+  top: 5%;
+}
+
+.PageTemplate__navbar i:hover {
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .PageTemplate__navbar_icons {
+    width: 20%;
+  }
+  .PageTemplate__navbar i {
+    margin-left: 25%;
+  }
+}
