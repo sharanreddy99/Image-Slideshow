@@ -1,35 +1,36 @@
 package routes
 
 import (
-	"backendgo/router/sqldb"
+	"backend_golang/constants"
+	"backend_golang/router/sqldb"
+	"backend_golang/utils"
 	"encoding/json"
 	"fmt"
 	"net/http"
 
-	//package for mysql
 	_ "github.com/go-sql-driver/mysql"
 )
 
 //SignupHandler POST API
-func SignupHandler(res http.ResponseWriter,req *http.Request){
+func SignupHandler(res http.ResponseWriter, req *http.Request) {
 
-	SetHeaders(&res)
+	utils.SetHeaders(&res)
 	response := make(map[string]string)
 
-	if(sqldb.DB==nil){
-		response["ModalTitle"]="Service Unavailable...";
-		response["ModalBody"]="Signup Service is unavailable right now... Please try again later";
+	if sqldb.DB == nil {
+		response["ModalTitle"] = "Service Unavailable..."
+		response["ModalBody"] = "Signup Service is unavailable right now... Please try again later"
 		res.WriteHeader(http.StatusServiceUnavailable)
 		panic("503 Error")
 	}
 
-	defer func(){
-		if r := recover(); r!=nil{
-			json.NewEncoder(res).Encode(response);
+	defer func() {
+		if r := recover(); r != nil {
+			_ = json.NewEncoder(res).Encode(response)
 		}
 	}()
 
-	req.ParseMultipartForm(0)
+	_ = req.ParseMultipartForm(0)
 
 	firstname := req.Form.Get("firstname")
 	lastname := req.Form.Get("lastname")
@@ -37,31 +38,31 @@ func SignupHandler(res http.ResponseWriter,req *http.Request){
 	mobile := req.Form.Get("mobile")
 	password := req.Form.Get("password")
 
-	stmt := "select * from sureify.user where email = '"+email+"';"
-	rows,_ := sqldb.DB.Query(stmt)
+	stmt := fmt.Sprintf("select * from %s.user where email = '%s';", constants.MYSQL_DATABASE, email)
+	rows, _ := sqldb.DB.Query(stmt)
 	defer rows.Close()
 
 	userExists := rows.Next()
-	if(userExists){
+	if userExists {
 		response["ModalTitle"] = "Email already registered..."
 		response["ModalBody"] = "A User has already registered with the specified Email..Please try again with another Email..."
 		res.WriteHeader(http.StatusForbidden)
 		panic("403 Error")
 
-	}else{
-		stmt = "insert into sureify.user values(NULL,'"+firstname+"','"+lastname+"','"+email+"','"+mobile+"','"+password+"',NULL);";
-		_, err := sqldb.DB.Query(stmt);
-		if err!=nil{
-			response["ModalTitle"]="Registration Failed..."
-			response["ModalBody"]="Error occured during registration..Please try again later..."    
+	} else {
+		stmt = fmt.Sprintf("insert into %s.user values(NULL,'%s','%s','%s','%s','%s',NULL);", constants.MYSQL_DATABASE, firstname, lastname, email, mobile, password)
+		_, err := sqldb.DB.Query(stmt)
+		if err != nil {
+			response["ModalTitle"] = "Registration Failed..."
+			response["ModalBody"] = "Error occured during registration..Please try again later..."
 			res.WriteHeader(http.StatusForbidden)
 			fmt.Println(err.Error())
 			panic("403 Error")
-		}else{
-			response["ModalTitle"]="Registration Successful..."
-			response["ModalBody"]="Registration has been completed successfully..Please Login..."                
-			res.WriteHeader(http.StatusCreated)	
+		} else {
+			response["ModalTitle"] = "Registration Successful..."
+			response["ModalBody"] = "Registration has been completed successfully..Please Login..."
+			res.WriteHeader(http.StatusCreated)
 		}
 	}
-	json.NewEncoder(res).Encode(response);
+	_ = json.NewEncoder(res).Encode(response)
 }

@@ -1,56 +1,58 @@
 package routes
 
 import (
-	"backendgo/router/sqldb"
+	"backend_golang/constants"
+	"backend_golang/router/sqldb"
+	"backend_golang/utils"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
 //DeleteSingleImageHandler POST API
-func DeleteSingleImageHandler(res http.ResponseWriter,req *http.Request,){
-	SetHeaders(&res)
+func DeleteSingleImageHandler(res http.ResponseWriter, req *http.Request) {
+	utils.SetHeaders(&res)
 	response := make(map[string]string)
 
-	if(sqldb.DB==nil){
-		response["ModalTitle"]="Service Unavailable...";
-		response["ModalBody"]="Signup Service is unavailable right now... Please try again later";
+	if sqldb.DB == nil {
+		response["ModalTitle"] = "Service Unavailable..."
+		response["ModalBody"] = "Signup Service is unavailable right now... Please try again later"
 		res.WriteHeader(http.StatusServiceUnavailable)
 		panic("503 Error")
 	}
 
-	defer func(){
-		if r := recover(); r!=nil{
-			json.NewEncoder(res).Encode(response);
+	defer func() {
+		if r := recover(); r != nil {
+			_ = json.NewEncoder(res).Encode(response)
 		}
 	}()
 
-	req.ParseMultipartForm(0)
-	token := req.Form.Get("token");
-	email := IsValidUser(token)
+	_ = req.ParseMultipartForm(0)
+	token := req.Form.Get("token")
+	email := utils.IsValidUser(token)
 
-	if(email==""){
-        response["ModalTitle"]="Not Authorized...";
-        response["ModalBody"]="You are not authorized...";    
-        res.WriteHeader(http.StatusUnauthorized)
-		panic("401 Error");
+	if email == "" {
+		response["ModalTitle"] = "Not Authorized..."
+		response["ModalBody"] = "You are not authorized..."
+		res.WriteHeader(http.StatusUnauthorized)
+		panic("401 Error")
 	}
-
 
 	filename := req.Form.Get("filename")
 
-	stmt := "delete from sureify.images where email = '"+email+"' and filename='"+filename+"';";
-	_,err := sqldb.DB.Query(stmt)
+	stmt := fmt.Sprintf("delete from %s.images where email = '%s' and filename='%s';", constants.MYSQL_DATABASE, email, filename)
+	_, err := sqldb.DB.Query(stmt)
 
-	if(err==nil){
-      response["ModalTitle"] = "Operation Successful...";
-      response["ModalBody"]  = "image ("+filename+") has been deleted successfully...";
-      res.WriteHeader(http.StatusOK)
-    }else{
-      response["ModalTitle"] = "Operation Failed...";
-      response["ModalBody"]  = "Image can't be deleted...";
+	if err == nil {
+		response["ModalTitle"] = "Operation Successful..."
+		response["ModalBody"] = "image (" + filename + ") has been deleted successfully..."
+		res.WriteHeader(http.StatusOK)
+	} else {
+		response["ModalTitle"] = "Operation Failed..."
+		response["ModalBody"] = "Image can't be deleted..."
 		res.WriteHeader(http.StatusForbidden)
-	  panic("403 Error");  
+		panic("403 Error")
 	}
-	
-	json.NewEncoder(res).Encode(response)
+
+	_ = json.NewEncoder(res).Encode(response)
 }

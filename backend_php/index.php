@@ -3,9 +3,6 @@
 require __DIR__.'/vendor/autoload.php';
 use \Firebase\JWT\JWT;
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-
 function generateRandomString($length = 10) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
@@ -17,7 +14,7 @@ function generateRandomString($length = 10) {
 }
 
 function generateToken($email){
-    $key = $_ENV["SECRETKEY"];
+    $key = $_ENV["IMAGE_VIEWER_SECRETKEY"];
     $string = generateRandomString();
 
     $payload = array(
@@ -33,7 +30,7 @@ function generateToken($email){
 }
 
 function verifyToken($token){
-    $key = $_ENV["SECRETKEY"];
+    $key = $_ENV["IMAGE_VIEWER_SECRETKEY"];
 
     try{
         $decoded = JWT::decode($token, $key, array('HS256'));

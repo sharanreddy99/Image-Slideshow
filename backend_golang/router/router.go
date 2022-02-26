@@ -1,24 +1,20 @@
 package router
 
 import (
-	routes "backendgo/router/routes"
-	"backendgo/router/sqldb"
+	"backend_golang/constants"
+	routes "backend_golang/router/routes"
+	"backend_golang/router/sqldb"
 	"fmt"
 	"log"
 	"net/http"
 
-	//package for mysql
-
 	"github.com/gorilla/mux"
-	"github.com/joho/godotenv"
 )
 
 //HandleRequests handle all the api calls for DynamicImageSlideshow
 func HandleRequests() {
-	godotenv.Load(".env");
-
 	sqldb.CreateConnection()
-	fmt.Println("Connection Established");
+	fmt.Println("Connection Established")
 	myRouter := mux.NewRouter()
 
 	//Routes
@@ -32,8 +28,7 @@ func HandleRequests() {
 	myRouter.HandleFunc("/isvaliduser", routes.IsValidUserHandler).Methods("POST")
 	myRouter.HandleFunc("/logout", routes.LogoutHandler).Methods("POST")
 	myRouter.HandleFunc("/updateuser", routes.UpdateUserHandler).Methods("POST")
-	
 
 	http.Handle("/", myRouter)
-	log.Fatal(http.ListenAndServe(":4205", nil))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", constants.GOLANG_PORT), nil))
 }

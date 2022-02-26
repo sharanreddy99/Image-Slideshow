@@ -1,50 +1,52 @@
 package routes
 
 import (
-	"backendgo/router/sqldb"
+	"backend_golang/constants"
+	"backend_golang/router/sqldb"
+	"backend_golang/utils"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
 //GetSingleImageHandler POST API
-func GetSingleImageHandler(res http.ResponseWriter,req *http.Request,){
-	SetHeaders(&res)
+func GetSingleImageHandler(res http.ResponseWriter, req *http.Request) {
+	utils.SetHeaders(&res)
 	response := make(map[string]string)
 
-	if(sqldb.DB==nil){
-		response["ModalTitle"]="Service Unavailable...";
-		response["ModalBody"]="Signup Service is unavailable right now... Please try again later";
+	if sqldb.DB == nil {
+		response["ModalTitle"] = "Service Unavailable..."
+		response["ModalBody"] = "Signup Service is unavailable right now... Please try again later"
 		res.WriteHeader(http.StatusServiceUnavailable)
 		panic("503 Error")
 	}
 
-	defer func(){
-		if r := recover(); r!=nil{
-			json.NewEncoder(res).Encode(response);
+	defer func() {
+		if r := recover(); r != nil {
+			_ = json.NewEncoder(res).Encode(response)
 		}
 	}()
 
-	req.ParseMultipartForm(0)
-	token := req.Form.Get("token");
-	email := IsValidUser(token)
+	_ = req.ParseMultipartForm(0)
+	token := req.Form.Get("token")
+	email := utils.IsValidUser(token)
 
-	if(email==""){
-        response["ModalTitle"]="Not Authorized...";
-        response["ModalBody"]="You are not authorized...";    
-        res.WriteHeader(http.StatusUnauthorized)
-		panic("401 Error");
+	if email == "" {
+		response["ModalTitle"] = "Not Authorized..."
+		response["ModalBody"] = "You are not authorized..."
+		res.WriteHeader(http.StatusUnauthorized)
+		panic("401 Error")
 	}
-
 
 	filename := req.Form.Get("filename")
 
-	stmt := "select imagedata from sureify.images where email = '"+email+"' and filename='"+filename+"';";
-	rows,_ := sqldb.DB.Query(stmt)
-	if(rows.Next()){
+	stmt := fmt.Sprintf("select imagedata from %s.images where email = '%s' and filename='%s';", constants.MYSQL_DATABASE, email, filename)
+	rows, _ := sqldb.DB.Query(stmt)
+	if rows.Next() {
 		imagedata := ""
-		rows.Scan(&imagedata)
-		response["imagedata"] = imagedata;
+		_ = rows.Scan(&imagedata)
+		response["imagedata"] = imagedata
 		response["fromgo"] = "true"
 	}
-	json.NewEncoder(res).Encode(response)
+	_ = json.NewEncoder(res).Encode(response)
 }
