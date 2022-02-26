@@ -27,7 +27,7 @@ const PageTemplate = (props) => {
       var formData = new FormData();
       formData.append("token", token);
 
-      const response = await axios({
+      await axios({
         url: "/isvaliduser",
         method: "post",
         headers: {
@@ -111,6 +111,7 @@ const PageTemplate = (props) => {
   //Effects
   useEffect(() => {
     isAuthorized();
+    // eslint-disable-next-line
   }, []);
 
   return (

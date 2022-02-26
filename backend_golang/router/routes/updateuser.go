@@ -18,7 +18,8 @@ func UpdateUserHandler(res http.ResponseWriter, req *http.Request) {
 		response["ModalTitle"] = "Service Unavailable..."
 		response["ModalBody"] = "Signup Service is unavailable right now... Please try again later"
 		res.WriteHeader(http.StatusServiceUnavailable)
-		panic("503 Error")
+		_ = json.NewEncoder(res).Encode(response)
+		return
 	}
 
 	defer func() {
@@ -35,7 +36,8 @@ func UpdateUserHandler(res http.ResponseWriter, req *http.Request) {
 		response["ModalTitle"] = "Not Authorized..."
 		response["ModalBody"] = "You are not authorized..."
 		res.WriteHeader(http.StatusUnauthorized)
-		panic("401 Error")
+		_ = json.NewEncoder(res).Encode(response)
+		return
 	}
 
 	firstname := req.Form.Get("firstname")
@@ -54,7 +56,8 @@ func UpdateUserHandler(res http.ResponseWriter, req *http.Request) {
 		res.WriteHeader(http.StatusForbidden)
 		response["ModalTitle"] = "Email already registered..."
 		response["ModalBody"] = "A User has already registered with the specified Email..Please try again with another Email..."
-		panic("403 Error")
+		_ = json.NewEncoder(res).Encode(response)
+		return
 	}
 
 	stmt = fmt.Sprintf("update %s.user set firstname = '%s',lastname='%s',email='%s',password='%s',mobile='%s' where email = '%s';", constants.MYSQL_DATABASE, firstname, lastname, newemail, password, mobile, email)
@@ -62,7 +65,7 @@ func UpdateUserHandler(res http.ResponseWriter, req *http.Request) {
 
 	if err == nil {
 
-		stmt = fmt.Sprintf("update %s.images set email='%s' where email='%s", constants.MYSQL_DATABASE, newemail, email)
+		stmt = fmt.Sprintf("update %s.images set email='%s' where email='%s'", constants.MYSQL_DATABASE, newemail, email)
 		_, _ = sqldb.DB.Exec(stmt)
 
 		res.WriteHeader(http.StatusOK)
@@ -73,7 +76,8 @@ func UpdateUserHandler(res http.ResponseWriter, req *http.Request) {
 		res.WriteHeader(http.StatusForbidden)
 		response["ModalTitle"] = "User Updation Failed..."
 		response["ModalBody"] = "Updating user has failed..Please try again..."
-		panic("403 Error")
+		_ = json.NewEncoder(res).Encode(response)
+		return
 	}
 	_ = json.NewEncoder(res).Encode(response)
 }

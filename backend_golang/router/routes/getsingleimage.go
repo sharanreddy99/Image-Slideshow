@@ -18,7 +18,8 @@ func GetSingleImageHandler(res http.ResponseWriter, req *http.Request) {
 		response["ModalTitle"] = "Service Unavailable..."
 		response["ModalBody"] = "Signup Service is unavailable right now... Please try again later"
 		res.WriteHeader(http.StatusServiceUnavailable)
-		panic("503 Error")
+		_ = json.NewEncoder(res).Encode(response)
+		return
 	}
 
 	defer func() {
@@ -35,7 +36,8 @@ func GetSingleImageHandler(res http.ResponseWriter, req *http.Request) {
 		response["ModalTitle"] = "Not Authorized..."
 		response["ModalBody"] = "You are not authorized..."
 		res.WriteHeader(http.StatusUnauthorized)
-		panic("401 Error")
+		_ = json.NewEncoder(res).Encode(response)
+		return
 	}
 
 	filename := req.Form.Get("filename")

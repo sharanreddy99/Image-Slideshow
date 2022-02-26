@@ -14,12 +14,13 @@ import (
 func GetAllImagesHandler(res http.ResponseWriter, req *http.Request) {
 	utils.SetHeaders(&res)
 	response := make(map[string]string)
-
 	if sqldb.DB == nil {
+
 		response["ModalTitle"] = "Service Unavailable..."
 		response["ModalBody"] = "Signup Service is unavailable right now... Please try again later"
 		res.WriteHeader(http.StatusServiceUnavailable)
-		panic("503 Error")
+		_ = json.NewEncoder(res).Encode(response)
+		return
 	}
 
 	defer func() {
@@ -37,7 +38,8 @@ func GetAllImagesHandler(res http.ResponseWriter, req *http.Request) {
 		response["ModalTitle"] = "Not Authorized..."
 		response["ModalBody"] = "You are not authorized..."
 		res.WriteHeader(http.StatusUnauthorized)
-		panic("401 Error")
+		_ = json.NewEncoder(res).Encode(response)
+		return
 	}
 
 	stmt := fmt.Sprintf("select filename,imagedata from %s.images where email = '%s';", constants.MYSQL_DATABASE, email)
@@ -70,5 +72,6 @@ func GetAllImagesHandler(res http.ResponseWriter, req *http.Request) {
 		response["extensionsarray"] = "[\"" + strings.Join(extensionsarray, `","`) + "\"]"
 		response["filenamesarray"] = "[\"" + strings.Join(filenamesarray, `","`) + "\"]"
 	}
+
 	_ = json.NewEncoder(res).Encode(response)
 }

@@ -38,7 +38,7 @@ func GenerateRandomString() string {
 
 //GenerateToken generates a JWT Token
 func GenerateToken(email string) string {
-	temp, _ := os.LookupEnv("SECRETCODE")
+	temp, _ := os.LookupEnv("IMAGE_VIEWER_SECRETKEY")
 	key := []byte(temp)
 
 	randstring := GenerateRandomString()
@@ -68,7 +68,7 @@ func GenerateToken(email string) string {
 
 //VerifyToken verifies the token and return boolean
 func VerifyToken(token string) string {
-	temp, _ := os.LookupEnv("SECRETCODE")
+	temp, _ := os.LookupEnv("IMAGE_VIEWER_SECRETKEY")
 	key := []byte(temp)
 
 	claims := &struct {
@@ -95,7 +95,7 @@ func VerifyToken(token string) string {
 func IsValidUser(token string) string {
 
 	email := VerifyToken(token)
-	stmt := fmt.Sprintf("select * from %s.user where email = '%s' and token='%s", constants.MYSQL_DATABASE, email, token)
+	stmt := fmt.Sprintf("select * from %s.user where email = '%s' and token='%s'", constants.MYSQL_DATABASE, email, token)
 	rows, _ := sqldb.DB.Query(stmt)
 	userExists := rows.Next()
 	if userExists {

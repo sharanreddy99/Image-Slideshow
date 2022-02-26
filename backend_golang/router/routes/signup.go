@@ -21,7 +21,8 @@ func SignupHandler(res http.ResponseWriter, req *http.Request) {
 		response["ModalTitle"] = "Service Unavailable..."
 		response["ModalBody"] = "Signup Service is unavailable right now... Please try again later"
 		res.WriteHeader(http.StatusServiceUnavailable)
-		panic("503 Error")
+		_ = json.NewEncoder(res).Encode(response)
+		return
 	}
 
 	defer func() {
@@ -47,7 +48,8 @@ func SignupHandler(res http.ResponseWriter, req *http.Request) {
 		response["ModalTitle"] = "Email already registered..."
 		response["ModalBody"] = "A User has already registered with the specified Email..Please try again with another Email..."
 		res.WriteHeader(http.StatusForbidden)
-		panic("403 Error")
+		_ = json.NewEncoder(res).Encode(response)
+		return
 
 	} else {
 		stmt = fmt.Sprintf("insert into %s.user values(NULL,'%s','%s','%s','%s','%s',NULL);", constants.MYSQL_DATABASE, firstname, lastname, email, mobile, password)
@@ -57,7 +59,8 @@ func SignupHandler(res http.ResponseWriter, req *http.Request) {
 			response["ModalBody"] = "Error occured during registration..Please try again later..."
 			res.WriteHeader(http.StatusForbidden)
 			fmt.Println(err.Error())
-			panic("403 Error")
+			_ = json.NewEncoder(res).Encode(response)
+			return
 		} else {
 			response["ModalTitle"] = "Registration Successful..."
 			response["ModalBody"] = "Registration has been completed successfully..Please Login..."

@@ -1,7 +1,6 @@
 package router
 
 import (
-	"backend_golang/constants"
 	routes "backend_golang/router/routes"
 	"backend_golang/router/sqldb"
 	"fmt"
@@ -30,5 +29,5 @@ func HandleRequests() {
 	myRouter.HandleFunc("/updateuser", routes.UpdateUserHandler).Methods("POST")
 
 	http.Handle("/", myRouter)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", constants.GOLANG_PORT), nil))
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }

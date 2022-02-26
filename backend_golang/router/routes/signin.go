@@ -20,7 +20,8 @@ func SigninHandler(res http.ResponseWriter, req *http.Request) {
 		response["ModalBody"] = "Signup Service is unavailable right now... Please try again later"
 		res.WriteHeader(http.StatusServiceUnavailable)
 		fmt.Println("WTF Service not available")
-		panic("503 Error")
+		_ = json.NewEncoder(res).Encode(response)
+		return
 	}
 
 	defer func() {
@@ -53,7 +54,8 @@ func SigninHandler(res http.ResponseWriter, req *http.Request) {
 		response["ModalTitle"] = "Invalid Credentials..."
 		response["ModalBody"] = "The Email or Password is incorrect. Please enter valid credentials..."
 		res.WriteHeader(http.StatusUnauthorized)
-		panic("401 Error")
+		_ = json.NewEncoder(res).Encode(response)
+		return
 	}
 	_ = json.NewEncoder(res).Encode(response)
 }

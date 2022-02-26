@@ -115,7 +115,7 @@ const Dashboard = () => {
 
   const deleteImageHandler = async () => {
     try {
-      if (filenames.length == 0) return;
+      if (filenames.length === 0) return;
 
       var formData = new FormData();
       formData.append("filename", filenames[counter]);
@@ -169,21 +169,6 @@ const Dashboard = () => {
         });
       }
     }
-  };
-
-  const logoutHandler = async () => {
-    var formData = new FormData();
-    formData.append("token", token);
-
-    await axios({
-      url: "/logout",
-      method: "post",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      data: formData,
-    });
-    history.push("/login");
   };
 
   return (

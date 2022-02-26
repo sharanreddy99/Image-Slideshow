@@ -2,17 +2,25 @@ import React from "react";
 import "./App.css";
 import RouterSetup from "./RouterSetup";
 import axios from "axios";
-import {
-  startingPartGO,
-  endingPartGO,
-  startingPartPHP,
-  endingPartPHP,
-} from "./baseURL";
+
+const BACKEND_HOST = process.env.REACT_APP_IMAGE_VIEWER_BACKEND_HOST;
 
 axios.interceptors.request.use(
   function (config) {
-    // config.url = startingPartPHP + config.url + endingPartPHP;
-    config.url = startingPartGO + config.url + endingPartGO;
+    switch (BACKEND_HOST) {
+      case "go": {
+        config.url = "/goapi" + config.url;
+        break;
+      }
+      case "php": {
+        config.url = "/phpapi" + config.url;
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+
     return config;
   },
   function (error) {

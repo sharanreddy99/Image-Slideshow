@@ -22,7 +22,8 @@ func ImageUploadHandler(res http.ResponseWriter, req *http.Request) {
 		response["ModalTitle"] = "Service Unavailable..."
 		response["ModalBody"] = "Signup Service is unavailable right now... Please try again later"
 		res.WriteHeader(http.StatusServiceUnavailable)
-		panic("503 Error")
+		_ = json.NewEncoder(res).Encode(response)
+		return
 	}
 
 	defer func() {
@@ -39,7 +40,8 @@ func ImageUploadHandler(res http.ResponseWriter, req *http.Request) {
 		response["ModalTitle"] = "Not Authorized..."
 		response["ModalBody"] = "You are not authorized..."
 		res.WriteHeader(http.StatusUnauthorized)
-		panic("401 Error")
+		_ = json.NewEncoder(res).Encode(response)
+		return
 	}
 
 	stmt := fmt.Sprintf("select max(fileno) fileno from %s.images", constants.MYSQL_DATABASE)
@@ -61,7 +63,8 @@ func ImageUploadHandler(res http.ResponseWriter, req *http.Request) {
 		response["ModalTitle"] = "Invalid File Format...."
 		response["ModalBody"] = "Please upload files of format jpg, jpeg and png..."
 		res.WriteHeader(http.StatusForbidden)
-		panic("403 Error")
+		_ = json.NewEncoder(res).Encode(response)
+		return
 	} else {
 
 		filename = "image" + strconv.Itoa(maxfileno) + "." + extension
@@ -75,7 +78,8 @@ func ImageUploadHandler(res http.ResponseWriter, req *http.Request) {
 			response["ModalTitle"] = "Image Uploading Failed...."
 			response["ModalBody"] = "Image Uploading failed.try again later..."
 			res.WriteHeader(http.StatusForbidden)
-			panic("403 Error")
+			_ = json.NewEncoder(res).Encode(response)
+			return
 		}
 
 		response["status"] = "success"

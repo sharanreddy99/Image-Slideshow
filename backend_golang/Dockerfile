@@ -10,7 +10,8 @@ RUN go get github.com/beego/bee/v2
 
 COPY . .
 
-RUN ["chmod","+x","start.sh"]
+EXPOSE 8080
 
+RUN ["chmod","+x","start.sh"]
 CMD ["./start.sh"]
 

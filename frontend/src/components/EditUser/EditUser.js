@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import "./EditUser.css";
 import axios from "axios";
 
@@ -10,7 +10,6 @@ import AuthorizationModal from "../Modals/AuthorizationModal";
 const EditUser = () => {
   //Constants and Variables
   const location = useLocation();
-  const history = useHistory();
   const oldemail = location.state && location.state.email;
 
   const initialState = {
@@ -91,7 +90,8 @@ const EditUser = () => {
     pattern = /^\d{10}$/i;
     mobile = pattern.test(user.mobile);
 
-    pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*.,])[A-Za-z\d!@#$%^&*.,]{8,50}$/s;
+    pattern =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*.,])[A-Za-z\d!@#$%^&*.,]{8,50}$/s;
     password = pattern.test(user.password);
     confirmpassword = pattern.test(user.confirmpassword);
 

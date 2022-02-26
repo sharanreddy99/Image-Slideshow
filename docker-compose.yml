@@ -8,13 +8,12 @@ services:
       MYSQL_USER: ${IMAGE_VIEWER_MYSQL_USER}
       MYSQL_PASSWORD: ${IMAGE_VIEWER_MYSQL_PASSWORD}
     healthcheck:
-      test: "/usr/bin/mysql --user=$$IMAGE_VIEWER_MYSQL_USER --password=$$IMAGE_VIEWER_MYSQL_PASSWORD --execute \"SHOW DATABASES;\""
-      interval: 5s
+      test: "/usr/bin/mysql --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD --execute \"SHOW DATABASES;\""
+      interval: 10s
       timeout: 20s
-      retries: 10
+      retries: 30
 
   phpmyadmin:
-    container_name: ceta_phpmyadmin
     image: phpmyadmin/phpmyadmin:latest
     depends_on: 
         - db
@@ -40,7 +39,7 @@ services:
       - db
       - phpmyadmin
     ports:
-       - "${IMAGE_VIEWER_PHP_PORT}:8080"
+       - "${IMAGE_VIEWER_PHP_PORT}:80"
   
   go:
     build:
@@ -63,3 +62,31 @@ services:
       - phpmyadmin
     ports:
        - "${IMAGE_VIEWER_GOLANG_PORT}:8080"
+  
+  react:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      # IMAGE_VIEWER_BACKEND_HOST: go
+      IMAGE_VIEWER_BACKEND_HOST: php
+    depends_on:
+      - go
+      - php
+    ports:
+      - ${IMAGE_VIEWER_REACT_PORT}:3000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+  nginx:
+    depends_on:
+      - react
+      - go
+      - php
+    restart: always
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
