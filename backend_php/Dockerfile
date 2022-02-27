@@ -2,20 +2,20 @@ FROM php:7.4-apache
 
 WORKDIR /var/www/html
 
-RUN apt-get update && apt-get install zip -y
-
-COPY . .
-
-RUN docker-php-ext-install pdo pdo_mysql && \
+RUN apt-get update && apt-get install zip netcat -y && \
+    docker-php-ext-install pdo pdo_mysql && \
     docker-php-ext-install mysqli && \
-    docker-php-ext-enable mysqli 
+    docker-php-ext-enable mysqli && \
+    (curl -sS "https://getcomposer.org/installer" | php)
 
-RUN (curl -sS "https://getcomposer.org/installer" | php)
-
-
+COPY compose* ./
 RUN php composer.phar install
+
+COPY ./start.sh ../
+RUN ["chmod","+x","../start.sh"]
+
+COPY . ./
 
 EXPOSE 80
 
-RUN ["chmod","+x","start.sh"]
-CMD ["./start.sh"]
+CMD ["../start.sh"]

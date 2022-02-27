@@ -5,9 +5,12 @@ WORKDIR /app
 COPY package* ./
 RUN npm install
 
+COPY ./start.sh ../
+RUN ["chmod","+x","../start.sh"]
+
 COPY . ./
 
 EXPOSE 3000
 
-RUN ["chmod","+x","start.sh"]
-CMD ["./start.sh"]
+CMD ["../start.sh"]
+

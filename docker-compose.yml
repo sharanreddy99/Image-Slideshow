@@ -7,11 +7,6 @@ services:
       MYSQL_DATABASE: ${IMAGE_VIEWER_MYSQL_DATABASE}
       MYSQL_USER: ${IMAGE_VIEWER_MYSQL_USER}
       MYSQL_PASSWORD: ${IMAGE_VIEWER_MYSQL_PASSWORD}
-    healthcheck:
-      test: "/usr/bin/mysql --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD --execute \"SHOW DATABASES;\""
-      interval: 10s
-      timeout: 20s
-      retries: 30
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
@@ -68,13 +63,13 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     environment:
-      # IMAGE_VIEWER_BACKEND_HOST: go
-      IMAGE_VIEWER_BACKEND_HOST: php
-    depends_on:
-      - go
-      - php
+      IMAGE_VIEWER_BACKEND_HOST: go
+      # IMAGE_VIEWER_BACKEND_HOST: php
     ports:
       - ${IMAGE_VIEWER_REACT_PORT}:3000
+    depends_on:
+      - php
+      - go
     volumes:
       - ./frontend:/app
       - /app/node_modules
