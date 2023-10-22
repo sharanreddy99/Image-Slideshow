@@ -84,4 +84,4 @@ services:
       context: ./nginx
       dockerfile: Dockerfile
     ports:
-      - "80:80"
+      - ${IMAGE_VIEWER_NGINX_PORT}:80
